@@ -23,10 +23,7 @@ export default function StickerBoard() {
   const loadStudents = async () => {
     try {
       setIsLoading(true);
-      const { data, error } = await supabase
-        .from("students")
-        .select("*")
-        .order("스티커", { ascending: false });
+      const { data, error } = await supabase.from("students").select("*");
 
       if (error) throw error;
 
@@ -45,7 +42,7 @@ export default function StickerBoard() {
         const { data: student } = await supabase
           .from("students")
           .select("*")
-          .eq("이름", action.이름)
+          .eq("id", action.id)
           .single();
 
         if (!student) throw new Error("Student not found");
@@ -61,19 +58,38 @@ export default function StickerBoard() {
           .eq("id", student.id);
 
         if (error) throw error;
+
+        // Update local state without reordering
+        setStudents((prevStudents) =>
+          prevStudents.map((s) =>
+            s.id === student.id ? { ...s, 스티커: newStickerCount } : s
+          )
+        );
+        setFilteredStudents((prevStudents) =>
+          prevStudents.map((s) =>
+            s.id === student.id ? { ...s, 스티커: newStickerCount } : s
+          )
+        );
       } else if (action.action === "set") {
-        const { error } = await supabase.from("students").insert({
-          이름: action.이름,
-          담당교사: action.담당교사,
-          레벨: action.레벨,
-          스티커: action.스티커,
-          캐릭터: action.캐릭터,
-        });
+        const { data, error } = await supabase
+          .from("students")
+          .insert({
+            이름: action.이름,
+            담당교사: action.담당교사,
+            레벨: action.레벨,
+            스티커: action.스티커,
+            캐릭터: action.캐릭터,
+          })
+          .select();
 
         if (error) throw error;
-      }
 
-      loadStudents();
+        // Add new student to the end of the list
+        if (data && data.length > 0) {
+          setStudents((prevStudents) => [...prevStudents, data[0]]);
+          setFilteredStudents((prevStudents) => [...prevStudents, data[0]]);
+        }
+      }
     } catch (error) {
       console.error("Error performing student action:", error);
     }
