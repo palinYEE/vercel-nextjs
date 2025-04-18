@@ -1,34 +1,37 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Student, StudentAction } from "@/types/student";
+import { useState } from "react";
+import { Student, StudentAction, Teacher, Level } from "@/types/student";
 
 interface StudentFormProps {
   students: Student[];
+  teachers: Teacher[];
+  levels: Level[];
   selectedCharacter: string;
   setSelectedCharacter: (character: string) => void;
   onStudentAction: (action: StudentAction) => void;
+  onAddTeacher: (teacherName: string) => void;
+  onAddLevel: (levelName: string) => void;
 }
 
 export default function StudentForm({
   students,
+  teachers,
+  levels,
   selectedCharacter,
   setSelectedCharacter,
   onStudentAction,
+  onAddTeacher,
+  onAddLevel,
 }: StudentFormProps) {
   const [name, setName] = useState("");
   const [teacher, setTeacher] = useState("");
   const [level, setLevel] = useState("");
   const [stickerCount, setStickerCount] = useState(1);
-  const [teachers, setTeachers] = useState<string[]>([]);
+  const [newTeacher, setNewTeacher] = useState("");
+  const [newLevel, setNewLevel] = useState("");
 
-  useEffect(() => {
-    // Extract unique teachers from students
-    const uniqueTeachers = Array.from(new Set(students.map((s) => s.담당교사)));
-    setTeachers(uniqueTeachers);
-  }, [students]);
-
-  const handleSubmit = (action: "add" | "subtract" | "set") => {
+  const handleSubmit = () => {
     if (!name || !teacher || !level || !selectedCharacter) return;
 
     const studentAction: StudentAction = {
@@ -37,13 +40,25 @@ export default function StudentForm({
       레벨: level,
       스티커: stickerCount,
       캐릭터: selectedCharacter,
-      action,
+      action: "set",
     };
 
     onStudentAction(studentAction);
     setName("");
     setLevel("");
     setStickerCount(1);
+  };
+
+  const handleAddNewTeacher = () => {
+    if (!newTeacher) return;
+    onAddTeacher(newTeacher);
+    setNewTeacher("");
+  };
+
+  const handleAddNewLevel = () => {
+    if (!newLevel) return;
+    onAddLevel(newLevel);
+    setNewLevel("");
   };
 
   const characters = [
@@ -86,18 +101,70 @@ export default function StudentForm({
         <label className="block text-gray-700 text-sm font-bold mb-2">
           담당교사
         </label>
-        <select
-          value={teacher}
-          onChange={(e) => setTeacher(e.target.value)}
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        >
-          <option value="">선생님을 선택하세요</option>
-          {teachers.map((t) => (
-            <option key={t} value={t}>
-              {t}
-            </option>
-          ))}
-        </select>
+        <div className="flex gap-2">
+          <select
+            value={teacher}
+            onChange={(e) => setTeacher(e.target.value)}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          >
+            <option value="">선생님을 선택하세요</option>
+            {teachers.map((t) => (
+              <option key={t.id} value={t.이름}>
+                {t.이름}
+              </option>
+            ))}
+          </select>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={newTeacher}
+              onChange={(e) => setNewTeacher(e.target.value)}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              placeholder="새 선생님"
+            />
+            <button
+              onClick={handleAddNewTeacher}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            >
+              추가
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-gray-700 text-sm font-bold mb-2">
+          레벨
+        </label>
+        <div className="flex gap-2">
+          <select
+            value={level}
+            onChange={(e) => setLevel(e.target.value)}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          >
+            <option value="">레벨을 선택하세요</option>
+            {levels.map((l) => (
+              <option key={l.id} value={l.이름}>
+                {l.이름}
+              </option>
+            ))}
+          </select>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={newLevel}
+              onChange={(e) => setNewLevel(e.target.value)}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              placeholder="새 레벨"
+            />
+            <button
+              onClick={handleAddNewLevel}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            >
+              추가
+            </button>
+          </div>
+        </div>
       </div>
 
       <div className="mb-4">
@@ -110,19 +177,6 @@ export default function StudentForm({
           onChange={(e) => setName(e.target.value)}
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           placeholder="이름을 입력하세요"
-        />
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">
-          레벨
-        </label>
-        <input
-          type="text"
-          value={level}
-          onChange={(e) => setLevel(e.target.value)}
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          placeholder="레벨을 입력하세요"
         />
       </div>
 
@@ -141,26 +195,12 @@ export default function StudentForm({
         />
       </div>
 
-      <div className="flex gap-2">
-        <button
-          onClick={() => handleSubmit("add")}
-          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline flex-1"
-        >
-          추가
-        </button>
-        <button
-          onClick={() => handleSubmit("subtract")}
-          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline flex-1"
-        >
-          차감
-        </button>
-        <button
-          onClick={() => handleSubmit("set")}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline flex-1"
-        >
-          설정
-        </button>
-      </div>
+      <button
+        onClick={handleSubmit}
+        className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+      >
+        학생 추가
+      </button>
     </div>
   );
 }

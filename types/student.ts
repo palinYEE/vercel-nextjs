@@ -5,7 +5,16 @@ export interface Student {
   레벨: string;
   스티커: number;
   캐릭터: string;
-  created_at: string;
+}
+
+export interface Teacher {
+  id: number;
+  이름: string;
+}
+
+export interface Level {
+  id: number;
+  이름: string;
 }
 
 export interface StudentAction {
