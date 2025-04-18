@@ -17,19 +17,25 @@ export default function StudentCards({
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {students.map((student) => (
         <div
-          key={student.이름}
+          key={student.id}
           className="bg-white shadow-lg rounded-lg p-6 flex flex-col"
         >
           <div className="text-center mb-4">
-            <div className="text-4xl mb-2">{student.캐릭터 || "👤"}</div>
+            <div className="text-4xl mb-2">{student.캐릭터}</div>
             <div className="text-xl font-bold">{student.이름}</div>
+            <div className="text-sm text-gray-600">
+              {student.담당교사} | {student.레벨}
+            </div>
           </div>
 
           <div className="flex justify-center items-center gap-2 mb-4">
             <button
               onClick={() =>
                 onStudentAction({
+                  id: student.id,
                   이름: student.이름,
+                  담당교사: student.담당교사,
+                  레벨: student.레벨,
                   스티커: 1,
                   캐릭터: student.캐릭터,
                   action: "subtract",
@@ -45,7 +51,10 @@ export default function StudentCards({
             <button
               onClick={() =>
                 onStudentAction({
+                  id: student.id,
                   이름: student.이름,
+                  담당교사: student.담당교사,
+                  레벨: student.레벨,
                   스티커: 1,
                   캐릭터: student.캐릭터,
                   action: "add",

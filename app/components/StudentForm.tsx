@@ -17,13 +17,17 @@ export default function StudentForm({
   onStudentAction,
 }: StudentFormProps) {
   const [name, setName] = useState("");
+  const [teacher, setTeacher] = useState("");
+  const [level, setLevel] = useState("");
   const [stickerCount, setStickerCount] = useState(1);
 
   const handleSubmit = (action: "add" | "subtract" | "set") => {
-    if (!name) return;
+    if (!name || !teacher || !level || !selectedCharacter) return;
 
     const studentAction: StudentAction = {
       이름: name,
+      담당교사: teacher,
+      레벨: level,
       스티커: stickerCount,
       캐릭터: selectedCharacter,
       action,
@@ -31,6 +35,8 @@ export default function StudentForm({
 
     onStudentAction(studentAction);
     setName("");
+    setTeacher("");
+    setLevel("");
     setStickerCount(1);
   };
 
@@ -87,6 +93,32 @@ export default function StudentForm({
             <option key={student.이름} value={student.이름} />
           ))}
         </datalist>
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-gray-700 text-sm font-bold mb-2">
+          담당교사
+        </label>
+        <input
+          type="text"
+          value={teacher}
+          onChange={(e) => setTeacher(e.target.value)}
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          placeholder="담당교사를 입력하세요"
+        />
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-gray-700 text-sm font-bold mb-2">
+          레벨
+        </label>
+        <input
+          type="text"
+          value={level}
+          onChange={(e) => setLevel(e.target.value)}
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          placeholder="레벨을 입력하세요"
+        />
       </div>
 
       <div className="mb-4">

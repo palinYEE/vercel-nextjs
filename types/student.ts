@@ -1,13 +1,20 @@
 export interface Student {
+  id: number;
   이름: string;
+  담당교사: string;
+  레벨: string;
   스티커: number;
-  캐릭터?: string;
+  캐릭터: string;
+  created_at: string;
 }
 
 export interface StudentAction {
+  id?: number;
   이름: string;
+  담당교사: string;
+  레벨: string;
   스티커: number;
-  캐릭터?: string;
+  캐릭터: string;
   action: "add" | "subtract" | "set";
 }
 
