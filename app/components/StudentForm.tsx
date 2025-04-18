@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Student, StudentAction } from "@/types/student";
 
 interface StudentFormProps {
@@ -20,6 +20,13 @@ export default function StudentForm({
   const [teacher, setTeacher] = useState("");
   const [level, setLevel] = useState("");
   const [stickerCount, setStickerCount] = useState(1);
+  const [teachers, setTeachers] = useState<string[]>([]);
+
+  useEffect(() => {
+    // Extract unique teachers from students
+    const uniqueTeachers = Array.from(new Set(students.map((s) => s.담당교사)));
+    setTeachers(uniqueTeachers);
+  }, [students]);
 
   const handleSubmit = (action: "add" | "subtract" | "set") => {
     if (!name || !teacher || !level || !selectedCharacter) return;
@@ -35,7 +42,6 @@ export default function StudentForm({
 
     onStudentAction(studentAction);
     setName("");
-    setTeacher("");
     setLevel("");
     setStickerCount(1);
   };
@@ -78,6 +84,24 @@ export default function StudentForm({
 
       <div className="mb-4">
         <label className="block text-gray-700 text-sm font-bold mb-2">
+          담당교사
+        </label>
+        <select
+          value={teacher}
+          onChange={(e) => setTeacher(e.target.value)}
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        >
+          <option value="">선생님을 선택하세요</option>
+          {teachers.map((t) => (
+            <option key={t} value={t}>
+              {t}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-gray-700 text-sm font-bold mb-2">
           학생 이름
         </label>
         <input
@@ -86,25 +110,6 @@ export default function StudentForm({
           onChange={(e) => setName(e.target.value)}
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           placeholder="이름을 입력하세요"
-          list="student-names"
-        />
-        <datalist id="student-names">
-          {students.map((student) => (
-            <option key={student.이름} value={student.이름} />
-          ))}
-        </datalist>
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">
-          담당교사
-        </label>
-        <input
-          type="text"
-          value={teacher}
-          onChange={(e) => setTeacher(e.target.value)}
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          placeholder="담당교사를 입력하세요"
         />
       </div>
 

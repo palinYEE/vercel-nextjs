@@ -71,6 +71,7 @@ export default function StickerBoard() {
           )
         );
       } else if (action.action === "set") {
+        // Create new student
         const { data, error } = await supabase
           .from("students")
           .insert({
@@ -80,14 +81,15 @@ export default function StickerBoard() {
             스티커: action.스티커,
             캐릭터: action.캐릭터,
           })
-          .select();
+          .select()
+          .single();
 
         if (error) throw error;
 
         // Add new student to the end of the list
-        if (data && data.length > 0) {
-          setStudents((prevStudents) => [...prevStudents, data[0]]);
-          setFilteredStudents((prevStudents) => [...prevStudents, data[0]]);
+        if (data) {
+          setStudents((prevStudents) => [...prevStudents, data]);
+          setFilteredStudents((prevStudents) => [...prevStudents, data]);
         }
       }
     } catch (error) {
