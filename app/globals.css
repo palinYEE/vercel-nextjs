@@ -1,26 +1,44 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --foreground-rgb: 0, 0, 0;
+  --background-rgb: 255, 255, 255;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-rgb));
+  font-family: "Pretendard", "Malgun Gothic", sans-serif;
+}
+
+@layer components {
+  .button {
+    @apply px-4 py-2 rounded-lg transition-colors;
+  }
+
+  .button-primary {
+    @apply button bg-blue-500 text-white hover:bg-blue-600;
+  }
+
+  .button-success {
+    @apply button bg-green-500 text-white hover:bg-green-600;
+  }
+
+  .button-danger {
+    @apply button bg-red-500 text-white hover:bg-red-600;
+  }
+
+  .card {
+    @apply bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow;
+  }
+
+  .input {
+    @apply w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500;
+  }
+
+  .select {
+    @apply w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500;
+  }
 }

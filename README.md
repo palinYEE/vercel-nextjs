@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 칭찬 스티커판
 
-## Getting Started
+학생들의 칭찬 스티커를 관리하는 웹 애플리케이션입니다.
 
-First, run the development server:
+## 기능
+
+- 학생 등록 및 관리
+- 스티커 추가/제거
+- 교사별/레벨별 필터링
+- TOP 3 학생 표시
+- 스티커 수 통계 차트
+- CSV 내보내기/가져오기
+
+## 기술 스택
+
+- Next.js 14
+- React 18
+- TypeScript
+- Tailwind CSS
+- Chart.js
+- PapaParse
+
+## 설치 및 실행
+
+1. 저장소 클론
+
+```bash
+git clone [repository-url]
+cd sticker-board
+```
+
+2. 의존성 설치
+
+```bash
+npm install
+```
+
+3. 개발 서버 실행
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. 빌드 및 프로덕션 실행
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+npm start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 환경 설정
 
-## Learn More
+1. Google Sheets API 설정
 
-To learn more about Next.js, take a look at the following resources:
+   - 스프레드시트 URL을 `SHEET_URL` 상수에 설정
+   - Google Apps Script URL을 `POST_URL` 상수에 설정
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. 캐릭터 이미지
+   - `public` 폴더에 `animal_1.png`부터 `animal_20.png`까지의 이미지 파일 추가
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 라이센스
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
